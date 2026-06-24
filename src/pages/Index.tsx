@@ -39,17 +39,21 @@ const MODULES: ModuleType[] = [
 ];
 
 const CATALOG = [
-  { name: 'Модульные стены', icon: 'LayoutPanelLeft', count: 32, image: null },
-  { name: 'Световые стенды и стены', icon: 'Lightbulb', count: 24, image: 'https://cdn.poehali.dev/projects/bdff14cc-6a21-4e2e-8438-bfc3281c519c/bucket/368e65e8-509a-4fac-aa4c-ba01ba58da88.png' },
-  { name: 'Колонны и арки', icon: 'Columns3', count: 21, image: null },
-  { name: 'Витрины и подиумы', icon: 'GalleryVertical', count: 48, image: null },
-  { name: 'Постаменты для образцов', icon: 'Box', count: 33, image: null },
-  { name: 'Ресепшены', icon: 'Monitor', count: 19, image: null },
-  { name: 'Переговорные зоны', icon: 'Users', count: 14, image: null },
-  { name: 'Цветники', icon: 'Flower2', count: 16, image: null },
-  { name: 'Фотозоны', icon: 'Camera', count: 18, image: null },
-  { name: 'Мультимедиа', icon: 'MonitorPlay', count: 27, image: null },
-  { name: 'Мебель', icon: 'Armchair', count: 86, image: null },
+  { name: 'Модульные стены', icon: 'LayoutPanelLeft', count: 32, images: [] },
+  { name: 'Световые стенды и стены', icon: 'Lightbulb', count: 24, images: [
+    'https://cdn.poehali.dev/projects/bdff14cc-6a21-4e2e-8438-bfc3281c519c/bucket/368e65e8-509a-4fac-aa4c-ba01ba58da88.png',
+    'https://cdn.poehali.dev/projects/bdff14cc-6a21-4e2e-8438-bfc3281c519c/bucket/171fa6d5-5c30-4dcb-a56f-9343bea1e7d9.png',
+    'https://cdn.poehali.dev/projects/bdff14cc-6a21-4e2e-8438-bfc3281c519c/bucket/ec9968f7-9129-48e1-940b-e6ed398a909f.png',
+  ] },
+  { name: 'Колонны и арки', icon: 'Columns3', count: 21, images: [] },
+  { name: 'Витрины и подиумы', icon: 'GalleryVertical', count: 48, images: [] },
+  { name: 'Постаменты для образцов', icon: 'Box', count: 33, images: [] },
+  { name: 'Ресепшены', icon: 'Monitor', count: 19, images: [] },
+  { name: 'Переговорные зоны', icon: 'Users', count: 14, images: [] },
+  { name: 'Цветники', icon: 'Flower2', count: 16, images: [] },
+  { name: 'Фотозоны', icon: 'Camera', count: 18, images: [] },
+  { name: 'Мультимедиа', icon: 'MonitorPlay', count: 27, images: [] },
+  { name: 'Мебель', icon: 'Armchair', count: 86, images: [] },
 ];
 
 const SERVICES = [
@@ -161,30 +165,7 @@ const Index = () => {
         <SectionHead kicker="Каталог" title="Модули и оборудование" />
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-border mt-10">
           {CATALOG.map((c) => (
-            <div key={c.name} className="group bg-card hover:bg-secondary transition-colors cursor-pointer overflow-hidden">
-              {c.image ? (
-                <div className="relative h-44 bg-background/60 flex items-center justify-center overflow-hidden border-b border-border">
-                  <img
-                    src={c.image}
-                    alt={c.name}
-                    className="h-full w-full object-contain p-4 transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <span className="absolute top-3 right-3 text-xs text-muted-foreground font-display bg-card/80 px-2 py-0.5">{c.count} поз.</span>
-                </div>
-              ) : null}
-              <div className="p-7">
-                {!c.image && (
-                  <div className="flex items-start justify-between mb-6">
-                    <Icon name={c.icon} className="text-primary group-hover:scale-110 transition-transform" size={32} />
-                    <span className="text-xs text-muted-foreground font-display">{c.count} поз.</span>
-                  </div>
-                )}
-                <h3 className="font-display font-semibold text-xl">{c.name}</h3>
-                <span className="inline-flex items-center gap-1 text-sm text-muted-foreground mt-2 group-hover:text-primary transition-colors">
-                  Смотреть <Icon name="ArrowRight" size={14} />
-                </span>
-              </div>
-            </div>
+            <CatalogCard key={c.name} {...c} />
           ))}
         </div>
       </section>
@@ -397,6 +378,63 @@ const Index = () => {
           <p className="text-xs text-muted-foreground">© 2026 Стенд-Модуль. Аренда выставочных стендов и оборудования.</p>
         </div>
       </footer>
+    </div>
+  );
+};
+
+const CatalogCard = ({ name, icon, count, images }: { name: string; icon: string; count: number; images: string[] }) => {
+  const [slide, setSlide] = useState(0);
+  const hasImages = images.length > 0;
+
+  return (
+    <div className="group bg-card hover:bg-secondary transition-colors cursor-pointer overflow-hidden">
+      {hasImages ? (
+        <div className="relative h-44 bg-background/60 border-b border-border overflow-hidden">
+          <img
+            src={images[slide]}
+            alt={name}
+            className="h-full w-full object-contain p-4 transition-all duration-500"
+          />
+          <span className="absolute top-3 right-3 text-xs text-muted-foreground font-display bg-card/80 px-2 py-0.5">{count} поз.</span>
+          {images.length > 1 && (
+            <>
+              <button
+                onClick={(e) => { e.stopPropagation(); setSlide((s) => (s - 1 + images.length) % images.length); }}
+                className="absolute left-2 top-1/2 -translate-y-1/2 w-7 h-7 bg-card/80 hover:bg-card border border-border flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+              >
+                <Icon name="ChevronLeft" size={14} />
+              </button>
+              <button
+                onClick={(e) => { e.stopPropagation(); setSlide((s) => (s + 1) % images.length); }}
+                className="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 bg-card/80 hover:bg-card border border-border flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+              >
+                <Icon name="ChevronRight" size={14} />
+              </button>
+              <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1">
+                {images.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={(e) => { e.stopPropagation(); setSlide(i); }}
+                    className={`w-1.5 h-1.5 rounded-full transition-all ${i === slide ? 'bg-primary w-3' : 'bg-muted-foreground/50'}`}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+      ) : null}
+      <div className="p-7">
+        {!hasImages && (
+          <div className="flex items-start justify-between mb-6">
+            <Icon name={icon} className="text-primary group-hover:scale-110 transition-transform" size={32} />
+            <span className="text-xs text-muted-foreground font-display">{count} поз.</span>
+          </div>
+        )}
+        <h3 className="font-display font-semibold text-xl">{name}</h3>
+        <span className="inline-flex items-center gap-1 text-sm text-muted-foreground mt-2 group-hover:text-primary transition-colors">
+          Смотреть <Icon name="ArrowRight" size={14} />
+        </span>
+      </div>
     </div>
   );
 };
