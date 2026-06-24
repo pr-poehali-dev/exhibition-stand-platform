@@ -39,17 +39,17 @@ const MODULES: ModuleType[] = [
 ];
 
 const CATALOG = [
-  { name: 'Модульные стены', icon: 'LayoutPanelLeft', count: 32 },
-  { name: 'Световые стенды и стены', icon: 'Lightbulb', count: 24 },
-  { name: 'Колонны и арки', icon: 'Columns3', count: 21 },
-  { name: 'Витрины и подиумы', icon: 'GalleryVertical', count: 48 },
-  { name: 'Постаменты для образцов', icon: 'Box', count: 33 },
-  { name: 'Ресепшены', icon: 'Monitor', count: 19 },
-  { name: 'Переговорные зоны', icon: 'Users', count: 14 },
-  { name: 'Цветники', icon: 'Flower2', count: 16 },
-  { name: 'Фотозоны', icon: 'Camera', count: 18 },
-  { name: 'Мультимедиа', icon: 'MonitorPlay', count: 27 },
-  { name: 'Мебель', icon: 'Armchair', count: 86 },
+  { name: 'Модульные стены', icon: 'LayoutPanelLeft', count: 32, image: null },
+  { name: 'Световые стенды и стены', icon: 'Lightbulb', count: 24, image: 'https://cdn.poehali.dev/projects/bdff14cc-6a21-4e2e-8438-bfc3281c519c/bucket/368e65e8-509a-4fac-aa4c-ba01ba58da88.png' },
+  { name: 'Колонны и арки', icon: 'Columns3', count: 21, image: null },
+  { name: 'Витрины и подиумы', icon: 'GalleryVertical', count: 48, image: null },
+  { name: 'Постаменты для образцов', icon: 'Box', count: 33, image: null },
+  { name: 'Ресепшены', icon: 'Monitor', count: 19, image: null },
+  { name: 'Переговорные зоны', icon: 'Users', count: 14, image: null },
+  { name: 'Цветники', icon: 'Flower2', count: 16, image: null },
+  { name: 'Фотозоны', icon: 'Camera', count: 18, image: null },
+  { name: 'Мультимедиа', icon: 'MonitorPlay', count: 27, image: null },
+  { name: 'Мебель', icon: 'Armchair', count: 86, image: null },
 ];
 
 const SERVICES = [
@@ -161,15 +161,29 @@ const Index = () => {
         <SectionHead kicker="Каталог" title="Модули и оборудование" />
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-border mt-10">
           {CATALOG.map((c) => (
-            <div key={c.name} className="group bg-card p-7 hover:bg-secondary transition-colors cursor-pointer">
-              <div className="flex items-start justify-between">
-                <Icon name={c.icon} className="text-primary group-hover:scale-110 transition-transform" size={32} />
-                <span className="text-xs text-muted-foreground font-display">{c.count} поз.</span>
+            <div key={c.name} className="group bg-card hover:bg-secondary transition-colors cursor-pointer overflow-hidden">
+              {c.image ? (
+                <div className="relative h-44 bg-background/60 flex items-center justify-center overflow-hidden border-b border-border">
+                  <img
+                    src={c.image}
+                    alt={c.name}
+                    className="h-full w-full object-contain p-4 transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <span className="absolute top-3 right-3 text-xs text-muted-foreground font-display bg-card/80 px-2 py-0.5">{c.count} поз.</span>
+                </div>
+              ) : null}
+              <div className="p-7">
+                {!c.image && (
+                  <div className="flex items-start justify-between mb-6">
+                    <Icon name={c.icon} className="text-primary group-hover:scale-110 transition-transform" size={32} />
+                    <span className="text-xs text-muted-foreground font-display">{c.count} поз.</span>
+                  </div>
+                )}
+                <h3 className="font-display font-semibold text-xl">{c.name}</h3>
+                <span className="inline-flex items-center gap-1 text-sm text-muted-foreground mt-2 group-hover:text-primary transition-colors">
+                  Смотреть <Icon name="ArrowRight" size={14} />
+                </span>
               </div>
-              <h3 className="font-display font-semibold text-xl mt-6">{c.name}</h3>
-              <span className="inline-flex items-center gap-1 text-sm text-muted-foreground mt-2 group-hover:text-primary transition-colors">
-                Смотреть <Icon name="ArrowRight" size={14} />
-              </span>
             </div>
           ))}
         </div>
