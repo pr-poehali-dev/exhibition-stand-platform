@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import Icon from '@/components/ui/icon';
 import { Button } from '@/components/ui/button';
 
@@ -60,15 +60,24 @@ const SERVICES = [
 
 const Index = () => {
   const [selected, setSelected] = useState<Record<string, number>>({ reception: 1, showcase: 2, podium: 1 });
+  const [saved, setSaved] = useState(false);
+  const contactsRef = useRef<HTMLDivElement>(null);
 
-  const add = (id: string) => setSelected((s) => ({ ...s, [id]: (s[id] || 0) + 1 }));
-  const remove = (id: string) =>
+  const add = (id: string) => { setSelected((s) => ({ ...s, [id]: (s[id] || 0) + 1 })); setSaved(false); };
+  const remove = (id: string) => {
     setSelected((s) => {
       const next = { ...s };
       if (next[id] > 1) next[id] -= 1;
       else delete next[id];
       return next;
     });
+    setSaved(false);
+  };
+
+  const saveAndScroll = () => {
+    setSaved(true);
+    contactsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
   const placed = useMemo(
     () => MODULES.flatMap((m) => Array.from({ length: selected[m.id] || 0 }, (_, i) => ({ ...m, key: `${m.id}-${i}` }))),
@@ -241,9 +250,16 @@ const Index = () => {
                   </div>
                 ))}
               </div>
-              <Button className="w-full mt-4 font-display tracking-wide rounded-none" size="lg">
-                <Icon name="FileText" className="mr-2" size={18} />Получить смету за {total.toLocaleString('ru')} ₽
-              </Button>
+              <div className="flex gap-2 mt-4">
+                <Button
+                  className="flex-1 font-display tracking-wide rounded-none"
+                  size="lg"
+                  onClick={saveAndScroll}
+                >
+                  <Icon name={saved ? 'CheckCheck' : 'FileText'} className="mr-2" size={18} />
+                  {saved ? 'Конфигурация сохранена' : `Отправить заявку · ${total.toLocaleString('ru')} ₽`}
+                </Button>
+              </div>
             </div>
           </div>
         </div>
@@ -288,7 +304,8 @@ const Index = () => {
       </section>
 
       {/* CONTACTS */}
-      <section id="contacts" className="container py-20 border-t border-border">
+      <section id="contacts" className="border-t border-border">
+        <div ref={contactsRef} className="container py-20">
         <div className="grid lg:grid-cols-2 gap-12">
           <div>
             <SectionHead kicker="Контакты" title="Обсудим ваш стенд" />
@@ -312,8 +329,42 @@ const Index = () => {
               <label className="text-xs uppercase tracking-wide text-muted-foreground font-display">Задача</label>
               <textarea rows={3} placeholder="Стенд 40 м² на выставку, нужны витрины и переговорная..." className="mt-1.5 w-full bg-background border border-border px-3 py-2 text-sm outline-none focus:border-primary transition-colors resize-none" />
             </div>
-            <Button type="submit" size="lg" className="w-full font-display tracking-wide rounded-none">Отправить заявку</Button>
+
+            {/* Блок конфигурации */}
+            {saved && placed.length > 0 && (
+              <div className="border border-primary/40 bg-primary/5 p-4 animate-fade-up">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2 text-xs font-display uppercase tracking-widest text-primary">
+                    <Icon name="CheckCircle" size={14} />
+                    Конфигурация из конфигуратора
+                  </div>
+                  <div className="text-xs text-muted-foreground">{area} м² · {placed.length} модулей</div>
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {MODULES.filter((m) => selected[m.id]).map((m) => (
+                    <span
+                      key={m.id}
+                      className="inline-flex items-center gap-1 px-2 py-0.5 text-xs border"
+                      style={{ borderColor: `${m.color}66`, color: m.color, background: `${m.color}18` }}
+                    >
+                      <Icon name={m.icon} size={11} />
+                      {m.name} ×{selected[m.id]}
+                    </span>
+                  ))}
+                </div>
+                <div className="mt-3 text-xs text-muted-foreground border-t border-border pt-2 flex justify-between">
+                  <span>Предварительная стоимость аренды</span>
+                  <span className="font-display font-semibold text-foreground">{total.toLocaleString('ru')} ₽</span>
+                </div>
+              </div>
+            )}
+
+            <Button type="submit" size="lg" className="w-full font-display tracking-wide rounded-none">
+              <Icon name="Send" className="mr-2" size={18} />
+              Отправить заявку
+            </Button>
           </form>
+        </div>
         </div>
       </section>
 
