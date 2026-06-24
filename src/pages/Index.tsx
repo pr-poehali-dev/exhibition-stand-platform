@@ -30,6 +30,12 @@ const MODULES: ModuleType[] = [
   { id: 'meeting', name: 'Переговорная', icon: 'Users', price: 60000, area: 9, color: 'hsl(270 50% 58%)' },
   { id: 'storage', name: 'Подсобка', icon: 'Archive', price: 18000, area: 4, color: 'hsl(0 0% 55%)' },
   { id: 'media', name: 'Медиа-стена', icon: 'MonitorPlay', price: 52000, area: 3, color: 'hsl(340 70% 55%)' },
+  { id: 'lightwall', name: 'Световая стена', icon: 'Lightbulb', price: 38000, area: 3, color: 'hsl(55 95% 55%)' },
+  { id: 'column', name: 'Колонна', icon: 'Columns3', price: 14000, area: 1, color: 'hsl(190 60% 50%)' },
+  { id: 'arch', name: 'Арка', icon: 'Sunset', price: 26000, area: 2, color: 'hsl(20 80% 55%)' },
+  { id: 'pedestal', name: 'Постамент', icon: 'PackageOpen', price: 12000, area: 1, color: 'hsl(168 50% 45%)' },
+  { id: 'flowers', name: 'Цветник', icon: 'Flower2', price: 9000, area: 1, color: 'hsl(310 55% 58%)' },
+  { id: 'photozone', name: 'Фотозона', icon: 'Camera', price: 35000, area: 6, color: 'hsl(240 60% 60%)' },
 ];
 
 const CATALOG = [
