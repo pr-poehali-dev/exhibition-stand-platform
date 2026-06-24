@@ -34,9 +34,14 @@ const MODULES: ModuleType[] = [
 
 const CATALOG = [
   { name: 'Модульные стены', icon: 'LayoutPanelLeft', count: 32 },
+  { name: 'Световые стенды и стены', icon: 'Lightbulb', count: 24 },
+  { name: 'Колонны и арки', icon: 'Columns3', count: 21 },
   { name: 'Витрины и подиумы', icon: 'GalleryVertical', count: 48 },
+  { name: 'Постаменты для образцов', icon: 'Box', count: 33 },
   { name: 'Ресепшены', icon: 'Monitor', count: 19 },
   { name: 'Переговорные зоны', icon: 'Users', count: 14 },
+  { name: 'Цветники', icon: 'Flower2', count: 16 },
+  { name: 'Фотозоны', icon: 'Camera', count: 18 },
   { name: 'Мультимедиа', icon: 'MonitorPlay', count: 27 },
   { name: 'Мебель', icon: 'Armchair', count: 86 },
 ];
