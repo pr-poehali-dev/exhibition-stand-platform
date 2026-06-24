@@ -269,19 +269,24 @@ const Index = () => {
       <section id="cases" className="container py-20 border-t border-border">
         <SectionHead kicker="Кейсы" title="Реализованные стенды" />
         <div className="grid md:grid-cols-2 gap-6 mt-10">
-          {[
-            { img: CASE_1, title: 'TechExpo 2025', meta: 'Стенд 36 м² · IT-компания' },
-            { img: CASE_2, title: 'Industrial Forum', meta: 'Двухэтажный стенд 120 м²' },
-          ].map((c) => (
-            <div key={c.title} className="group relative overflow-hidden border border-border hover-lift">
-              <img src={c.img} alt={c.title} className="w-full aspect-[16/10] object-cover transition-transform duration-700 group-hover:scale-105" />
-              <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
-              <div className="absolute bottom-0 left-0 p-6">
-                <div className="text-xs text-primary uppercase tracking-widest font-display">{c.meta}</div>
-                <h3 className="font-display font-bold text-2xl mt-1">{c.title}</h3>
+          {/* Первый кейс — широкий, на всю ширину */}
+          {(() => {
+            const cases = [
+              { img: 'https://cdn.poehali.dev/projects/bdff14cc-6a21-4e2e-8438-bfc3281c519c/bucket/fc8d74cd-1e04-45a5-9a85-d5d9cd45c8b0.jpeg', title: 'Корпорация развития Башкортостана', meta: 'Световые колонны · модульный стенд · ~80 м²', wide: true },
+              { img: CASE_1, title: 'TechExpo 2025', meta: 'Стенд 36 м² · IT-компания', wide: false },
+              { img: CASE_2, title: 'Industrial Forum', meta: 'Двухэтажный стенд 120 м²', wide: false },
+            ];
+            return cases.map((c) => (
+              <div key={c.title} className={`group relative overflow-hidden border border-border hover-lift${c.wide ? ' md:col-span-2' : ''}`}>
+                <img src={c.img} alt={c.title} className={`w-full object-cover transition-transform duration-700 group-hover:scale-105 ${c.wide ? 'aspect-[21/9]' : 'aspect-[16/10]'}`} />
+                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
+                <div className="absolute bottom-0 left-0 p-6">
+                  <div className="text-xs text-primary uppercase tracking-widest font-display">{c.meta}</div>
+                  <h3 className="font-display font-bold text-2xl mt-1">{c.title}</h3>
+                </div>
               </div>
-            </div>
-          ))}
+            ));
+          })()}
         </div>
       </section>
 
